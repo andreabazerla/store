@@ -1,2 +1,2 @@
-# Email
-## An email multi-thread parser validator built in J2EE with love on reader and writer architecture.
+# Store
+## Simple e-commerce website built in J2EE  on Spring MVC, Hibernate, Maven with Bootstrap and jQuery.
