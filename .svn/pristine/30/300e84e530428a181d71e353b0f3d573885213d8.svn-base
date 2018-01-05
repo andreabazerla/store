@@ -1,0 +1,40 @@
+$(document).ready(function() {
+	
+	$('.button-add-to-cart').click(function() {
+
+		var formData = {
+			idProduct : $(this).parents().children(":first-child").val(),
+		};
+		
+		$.ajax({
+			type : 'POST',
+			url : 'AddToCart',
+			data : formData,
+			conteType : 'application/json',
+			dataType : 'json',
+			success : function(data) {
+				$('#product-' + data.idCard).closest('.product').hide();
+			},
+		});
+	});
+	
+	$('.button-delete-product').click(function() {
+
+		var formData = {
+			idProduct : $(this).parents().children('.id-product').val(),
+		};
+		
+		$.ajax({
+			type : 'POST',
+			url : 'DeleteProduct',
+			data : formData,
+			conteType : 'application/json',
+			dataType : 'json',
+			success : function(data) {
+				console.log(data);
+				$('#product-' + data.idProduct).closest('.product').hide();
+			},
+		});
+	});
+	
+});

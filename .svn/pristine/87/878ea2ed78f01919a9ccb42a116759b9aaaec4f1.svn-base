@@ -1,0 +1,71 @@
+package com.andreabazerla.dao;
+
+import java.util.List;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import com.andreabazerla.model.Factory_t;
+
+@Repository
+public class FactoryDaoImpl implements FactoryDao
+{
+
+	@Autowired
+	private SessionFactory sessionFactory;
+
+	@Override
+	public void createFactory(Factory_t factory_t)
+	{
+		sessionFactory.getCurrentSession()
+		              .saveOrUpdate(factory_t);
+
+	}
+
+	@SuppressWarnings("deprecation")
+	public Factory_t readFactory(int id)
+	{
+
+		Session session = sessionFactory.getCurrentSession();
+
+		return (Factory_t) session.createCriteria(Factory_t.class)
+		                          .add(Restrictions.eq("id",
+		                                               id))
+		                          .uniqueResult();
+	}
+
+	@Override
+	public Factory_t getFactory(int id)
+	{
+
+		return (Factory_t) sessionFactory.getCurrentSession()
+		                                 .get(Factory_t.class,
+		                                      id);
+
+	}
+
+	public void deleteFactory(int id)
+	{
+		Factory_t factory_t = (Factory_t) sessionFactory.getCurrentSession()
+		                                                .load(Factory_t.class,
+		                                                      id);
+		if (null != factory_t)
+		{
+			this.sessionFactory.getCurrentSession()
+			                   .delete(factory_t);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Factory_t> getAllFactory()
+	{
+		return sessionFactory.getCurrentSession()
+		                     .createQuery("from Factory_t")
+		                     .list();
+	}
+
+}

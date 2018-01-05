@@ -1,0 +1,29 @@
+package com.andreabazerla.dao;
+
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import com.andreabazerla.model.Receipt_t;
+
+@Repository
+public class ReceiptDaoImpl implements ReceiptDao
+{
+
+	@Autowired
+	private SessionFactory sessionFactory;
+
+	@Override
+	public void deleteReceipt(int id)
+	{
+		Receipt_t receipt_t = (Receipt_t) sessionFactory.getCurrentSession()
+		                                     .load(Receipt_t.class,
+		                                           id);
+		if (null != receipt_t)
+		{
+			this.sessionFactory.getCurrentSession()
+			                   .delete(receipt_t);
+		}
+	}
+
+}

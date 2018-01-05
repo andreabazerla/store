@@ -1,0 +1,14 @@
+package com.andreabazerla.service;
+
+import java.util.ArrayList;
+
+import com.andreabazerla.model.Product;
+
+public interface ProductService extends GenericService<Product>
+{
+
+	public Product get(int id);
+	
+	public ArrayList<Product> load(String search);
+
+}

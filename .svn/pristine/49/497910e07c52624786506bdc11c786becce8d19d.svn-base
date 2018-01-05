@@ -1,0 +1,12 @@
+package com.andreabazerla.service;
+
+import java.util.ArrayList;
+
+import com.andreabazerla.model.Person_t;
+
+public interface PersonService extends GenericService<Person_t> {
+	
+	public Person_t get(String cf);
+	public ArrayList<Person_t> load(String search);
+	
+}

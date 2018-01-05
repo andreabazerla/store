@@ -1,0 +1,20 @@
+package com.andreabazerla.dao;
+
+import java.util.List;
+
+import com.andreabazerla.model.Product_t;
+
+public interface ProductDao extends GenericDao<Product_t> {
+	
+	public void createProduct(Product_t Product);
+
+	public List<Product_t> readProducts();
+
+	public Product_t updateProduct(Product_t Product);
+
+	public void deleteProduct(int id);
+
+	public Product_t getProduct(int id);
+	public List<Product_t> searchProduct(String pattern);
+	
+}

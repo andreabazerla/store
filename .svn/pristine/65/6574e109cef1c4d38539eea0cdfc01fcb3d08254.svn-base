@@ -1,0 +1,182 @@
+package com.andreabazerla.facade;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Random;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.andreabazerla.bean.BeanProductPreview;
+import com.andreabazerla.model.Product_t;
+import com.andreabazerla.model.Purchase_t;
+import com.andreabazerla.model.Receipt_t;
+import com.andreabazerla.model.User_t;
+import com.andreabazerla.service.FactoryService;
+import com.andreabazerla.service.PersonService;
+import com.andreabazerla.service.ProductService;
+import com.andreabazerla.service.PurchaseService;
+import com.andreabazerla.service.UserService;
+
+@Component
+@Transactional
+public class WebFacadeImpl implements WebFacade
+{
+
+	@Autowired
+	private PersonService personService;
+
+	@Autowired
+	private ProductService productService;
+
+	@Autowired
+	private FactoryService factoryService;
+
+	@Autowired
+	private UserService userService;
+
+	@Autowired
+	private PurchaseService purchaseService;
+
+	@Override
+	public void addToCart(int idUser,
+	                      int idProduct)
+	{
+		Product_t product = productService.get(idProduct);
+		User_t user = userService.get(idUser);
+
+		List<Product_t> productList = user.getProductCart();
+
+		productList.add(product);
+
+		user.setProductCart(productList);
+
+	}
+
+	@Override
+	public List<BeanProductPreview> getProductCartList(int idUser)
+	{
+
+		List<BeanProductPreview> beanProductsList = new ArrayList<>();
+
+		User_t user = userService.get(idUser);
+
+		for (Product_t product : user.getProductCart())
+		{
+			BeanProductPreview beanProduct = new BeanProductPreview();
+
+			beanProduct.setId(product.getId());
+			beanProduct.setName(product.getName());
+			beanProduct.setDescription(product.getDescription());
+			beanProduct.setPrice(product.getPrice());
+
+			beanProductsList.add(beanProduct);
+		}
+
+		return beanProductsList;
+
+	}
+
+	@Override
+	public List<BeanProductPreview> getProductShoppingList(int idUser)
+	{
+
+		List<BeanProductPreview> beanProductsList = new ArrayList<>();
+
+		User_t user = userService.get(idUser);
+
+		for (Product_t product : user.getProductPurchase())
+		{
+			BeanProductPreview beanProduct = new BeanProductPreview();
+
+			beanProduct.setId(product.getId());
+			beanProduct.setName(product.getName());
+			beanProduct.setDescription(product.getDescription());
+			beanProduct.setPrice(product.getPrice());
+
+			beanProductsList.add(beanProduct);
+		}
+
+		return beanProductsList;
+	}
+
+	@Override
+	public List<Purchase_t> setPurchase(List<Purchase_t> purchaseList,
+	                                    List<BeanProductPreview> productBeanList,
+	                                    int idUser)
+	{
+
+		// Get User from ID through service
+		User_t user = getUserService().get(idUser);
+
+		// Create now the Receipt()
+		Receipt_t receipt = new Receipt_t();
+
+		float amount = 0;
+
+		for (BeanProductPreview beanProductPreview : productBeanList)
+		{
+			// Get the product from bean
+			Product_t product = getProductService().get(beanProductPreview.getId());
+
+			// Create new Purchase() and set its IDs of User, Product
+			// Leave Receipt NULL to be setted later at end of purchase
+			Purchase_t purchase_t = new Purchase_t();
+			purchase_t.setUser(user);
+			purchase_t.setProduct(product);
+			purchase_t.setReceipt(receipt);
+
+			// Add the Purchase in its List
+			purchaseList.add(purchase_t);
+
+			// Save the Purchase through its service
+			purchaseService.create(purchase_t);
+
+			amount += product.getPrice();
+		}
+
+		Date date = new Date();
+		Random random = new Random();
+		int code = random.nextInt(1000000000);		
+
+		// Set Receipt values 
+		receipt.setAmount(amount);
+		receipt.setCode(code);
+		receipt.setDate(date);
+		
+		user.setProductCart(null);
+
+		// Return Purchase List
+		return purchaseList;
+
+	}
+
+	public PersonService getPersonService()
+	{
+		return personService;
+	}
+
+	public ProductService getProductService()
+	{
+		return productService;
+	}
+
+	public FactoryService getFactoryService()
+	{
+		return factoryService;
+	}
+
+	public UserService getUserService()
+	{
+		return userService;
+	}
+
+	@Override
+	public PurchaseService getPurchaseService()
+	{
+		return purchaseService;
+	}
+
+}

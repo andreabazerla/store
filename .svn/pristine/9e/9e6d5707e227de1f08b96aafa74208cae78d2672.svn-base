@@ -1,0 +1,49 @@
+package com.andreabazerla.dao;
+
+import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import com.andreabazerla.model.Receipt_t;
+
+@Repository
+public class ReceiptDaoImpl implements ReceiptDao
+{
+	@Autowired
+	private SessionFactory sessionFactory;
+
+	@Override
+	public Receipt_t readReceipt(int id)
+	{
+
+		return sessionFactory.getCurrentSession()
+		                     .load(Receipt_t.class,
+		                           id);
+	}
+
+	@Override
+	public void deleteReceipt(int id)
+	{
+		Receipt_t receipt_t = sessionFactory.getCurrentSession()
+		                                    .load(Receipt_t.class,
+		                                          id);
+		if (null != receipt_t)
+		{
+			this.sessionFactory.getCurrentSession()
+			                   .delete(receipt_t);
+		}
+	}
+
+	@Override
+	public void printReceipt(int idReceipt)
+	{
+		Query<?> query = this.sessionFactory.getCurrentSession()
+		                                    .createQuery("update Receipt_t as r set r.flag = 1 where r.id = :idReceipt");
+		query.setParameter("idReceipt",
+		                   idReceipt);
+
+		query.executeUpdate();
+	}
+
+}

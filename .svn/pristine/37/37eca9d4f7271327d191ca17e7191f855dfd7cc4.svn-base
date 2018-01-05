@@ -1,0 +1,114 @@
+package com.andreabazerla.facade;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.andreabazerla.bean.BeanProduct;
+import com.andreabazerla.model.Product_t;
+import com.andreabazerla.model.User_t;
+import com.andreabazerla.service.FactoryService;
+import com.andreabazerla.service.PersonService;
+import com.andreabazerla.service.ProductService;
+import com.andreabazerla.service.UserService;
+
+@Component
+@Transactional
+public class WebFacadeImpl implements WebFacade
+{
+
+	@Autowired
+	private PersonService personService;
+
+	@Autowired
+	private ProductService productService;
+
+	@Autowired
+	private FactoryService factoryService;
+
+	@Autowired
+	private UserService userService;
+
+	@Override
+	public User_t addToCart(int idUser,
+	                        int idProduct)
+	{
+
+		Product_t product = productService.get(idProduct);
+		User_t user = userService.get(idUser);
+
+		List<Product_t> productList = user.getProductCart();
+
+		productList.add(product);
+
+		user.setProductCart(productList);
+
+		return user;
+	}
+
+	@Override
+	public List<BeanProduct> getProductList(int idUser)
+	{
+
+		List<BeanProduct> beanProductsList = new ArrayList<>();
+
+		User_t user = userService.get(idUser);
+
+		for (Product_t product : user.getProductCart())
+		{
+			BeanProduct beanProduct = new BeanProduct();
+
+			beanProduct.setName(product.getName());
+			beanProduct.setDescription(product.getDescription());
+			float price = product.getPrice();
+			beanProduct.setPrice(price);
+
+			beanProductsList.add(beanProduct);
+		}
+
+		return beanProductsList;
+
+	}
+
+	@Override
+	public User_t getProductCart(int idUser)
+	{
+
+		User_t user = null;
+
+		List<Product_t> productCartList;
+
+		user = userService.get(idUser);
+
+		productCartList = user.getProductCart();
+
+//		user.setProductShopping(productCartList);
+
+		return user;
+
+	}
+
+	public PersonService getPersonService()
+	{
+		return personService;
+	}
+
+	public ProductService getProductService()
+	{
+		return productService;
+	}
+
+	public FactoryService getFactoryService()
+	{
+		return factoryService;
+	}
+
+	public UserService getUserService()
+	{
+		return userService;
+	}
+
+}

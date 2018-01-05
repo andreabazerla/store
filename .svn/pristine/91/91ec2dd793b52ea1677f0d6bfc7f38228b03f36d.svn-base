@@ -1,0 +1,25 @@
+package com.andreabazerla.bean;
+
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+
+public class PageBeanShopping implements Serializable
+{
+
+	private static final long serialVersionUID = 1L;
+
+	private Map<BeanReceipt, BeanPurchase> beanReceiptPurchaseMap = new HashMap<>();
+
+	public Map<BeanReceipt, BeanPurchase> getBeanReceiptPurchaseMap()
+	{
+		return beanReceiptPurchaseMap;
+	}
+
+	public void set(Map<BeanReceipt, BeanPurchase> tempBeanReceiptPurchaseMap)
+	{
+		tempBeanReceiptPurchaseMap.keySet().removeAll(beanReceiptPurchaseMap.keySet());
+		beanReceiptPurchaseMap.putAll(tempBeanReceiptPurchaseMap);
+	}
+
+}

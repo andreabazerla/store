@@ -1,0 +1,38 @@
+package com.andreabazerla.bean;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.andreabazerla.util.NullValue;
+
+public class PageBeanFactoryProductList implements Serializable
+{
+
+	private static final long serialVersionUID = 1L;
+
+	private String name = NullValue.STRING;
+
+	private List<BeanProductPreview> beanProductPreviewList = new ArrayList<>();
+
+	public void add(BeanProductPreview beanProduct)
+	{
+		beanProductPreviewList.add(beanProduct);
+	}
+
+	public List<BeanProductPreview> getProductList()
+	{
+		return beanProductPreviewList;
+	}
+
+	public String getName()
+	{
+		return name;
+	}
+
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+
+}

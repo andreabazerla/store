@@ -1,0 +1,65 @@
+package com.andreabazerla.service;
+
+import java.sql.SQLException;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.andreabazerla.dao.UserDaoImpl;
+import com.andreabazerla.exception.DeleteUserException;
+import com.andreabazerla.model.User_t;
+
+@Service
+@Transactional
+public class UserServiceImpl implements UserService
+{
+
+	@Autowired
+	private UserDaoImpl userDao;
+
+	@Override
+	public void create(User_t user) throws SQLException
+	{
+		userDao.createUser(user);
+	}
+
+	@Override
+	public List<User_t> read()
+	{
+		return userDao.readUsers();
+	}
+
+	@Override
+	public User_t get(int id)
+	{
+		return userDao.getUser(id);
+	}
+
+	@Override
+	public User_t load(String pattern)
+	{
+		return userDao.loadUser(pattern);
+	}
+
+	@Override
+	public void update(User_t user)
+	{
+		userDao.updateUser(user);
+	}
+
+	@Override
+	public void delete(int id) throws DeleteUserException
+	{
+		if (userDao.hasUserPurchase(id))
+		{
+			throw new DeleteUserException("User not deletable because he has purchases");
+		}
+		else
+		{
+			userDao.deleteUser(id);
+		}
+	}
+
+}

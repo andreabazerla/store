@@ -1,0 +1,45 @@
+package com.andreabazerla.service;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.andreabazerla.dao.ProductDao;
+import com.andreabazerla.model.Product;
+
+@Service
+@Transactional
+public class ProductServiceImpl implements ProductService {
+
+	@Autowired
+	private ProductDao productDao;
+	
+	public void create(Product product) throws SQLException {
+		productDao.createProduct(product);
+	}
+
+	public List<Product> read() {
+		return productDao.readProducts();
+	}
+	
+	public Product get(int id) {
+		return productDao.getProduct(id);
+	}
+	
+	public ArrayList<Product> load(String search) {
+		return (ArrayList<Product>) productDao.searchProduct(search);
+	}
+	
+	public void delete(int id) {
+		productDao.deleteProduct(id);
+	}
+
+	public void update(Product product) {
+		productDao.updateProduct(product);
+	}
+	
+}

@@ -1,0 +1,240 @@
+package com.andreabazerla.dao;
+
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.criterion.DetachedCriteria;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Property;
+import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.Subqueries;
+import org.hibernate.sql.JoinType;
+import org.hibernate.transform.AliasToBeanResultTransformer;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import com.andreabazerla.bean.BeanProduct;
+import com.andreabazerla.bean.BeanSearch;
+import com.andreabazerla.model.Product_t;
+import com.andreabazerla.model.Purchase_t;
+import com.andreabazerla.model.Receipt_t;
+import com.andreabazerla.model.User_t;
+import com.andreabazerla.util.StringUtility;
+
+@Repository
+public class ProductDaoImpl implements ProductDao
+{
+
+	@Autowired
+	private SessionFactory sessionFactory;
+
+	public void createProduct(Product_t product)
+	{
+		sessionFactory.getCurrentSession()
+		              .saveOrUpdate(product);
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Product_t> readProducts()
+	{
+
+		return sessionFactory.getCurrentSession()
+		                     .createQuery("from Product_t")
+		                     .list();
+	}
+
+	@SuppressWarnings(
+	{ "unchecked", "deprecation" })
+	public List<BeanProduct> readProducts(BeanSearch beanSearch)
+	{
+
+		Session session = sessionFactory.getCurrentSession();
+
+		Criteria criteria = session.createCriteria(Product_t.class);
+
+		if (!StringUtility.isStringEmpty(beanSearch.getName()))
+		{
+			criteria.add(Restrictions.ilike("name",
+			                                beanSearch.getName(),
+			                                MatchMode.ANYWHERE));
+		}
+
+		if (!StringUtility.isStringEmpty(beanSearch.getDescription()))
+		{
+			criteria.add(Restrictions.ilike("description",
+			                                beanSearch.getDescription(),
+			                                MatchMode.ANYWHERE));
+		}
+
+		if (beanSearch.getFactory() != 0)
+		{
+			criteria.add(Restrictions.eq("factory.id",
+			                             beanSearch.getFactory()));
+		}
+
+		if (beanSearch.getMin() != 0 || beanSearch.getMax() != 0)
+		{
+			criteria.add(Restrictions.between("price",
+			                                  (float) beanSearch.getMin(),
+			                                  (float) beanSearch.getMax()));
+		}
+
+		DetachedCriteria detachedCriteriaPurchase = DetachedCriteria.forClass(Product_t.class)
+		                                                            .setProjection(Property.forName("id"))
+		                                                            .createCriteria("purchase",
+		                                                                            JoinType.INNER_JOIN);
+
+		criteria.setProjection(Projections.projectionList()
+		                                             .add(Projections.property("id"),
+		                                                  "id")
+		                                             .add(Projections.property("name"),
+		                                                  "name")
+		                                             .add(Projections.property("description"),
+		                                                  "description")
+		                                             .add(Projections.property("price"),
+		                                                  "price"))
+		                   .add(Restrictions.sqlRestriction("{alias}.id not in (select c.idProduct_fk from cart c inner join product p on c.idProduct_fk = p.id)"))
+		                   .add(Subqueries.propertyNotIn("id",
+		                                                 detachedCriteriaPurchase))
+		                   .setResultTransformer(new AliasToBeanResultTransformer(BeanProduct.class));
+
+		List<BeanProduct> productList = criteria.list();
+
+		return productList;
+	}
+
+	public Product_t getProduct(int id)
+	{
+
+		Session session = sessionFactory.getCurrentSession();
+
+		Product_t product = session.get(Product_t.class,
+		                                id);
+
+		return product;
+	}
+
+	public Product_t updateProduct(Product_t product)
+	{
+		sessionFactory.getCurrentSession()
+		              .update(product);
+		return product;
+	}
+
+	public boolean deleteProduct(int id)
+	{
+		Product_t product = (Product_t) sessionFactory.getCurrentSession()
+		                                              .load(Product_t.class,
+		                                                    id);
+		if (null != product)
+		{
+			this.sessionFactory.getCurrentSession()
+			                   .delete(product);
+			return true;
+		}
+		return false;
+	}
+
+	@SuppressWarnings(
+	{ "deprecation", "unchecked" })
+	public List<Product_t> searchProduct(String search)
+	{
+		Session currentSession = sessionFactory.getCurrentSession();
+
+		return currentSession.createCriteria(Product_t.class)
+		                     .add(Restrictions.disjunction()
+		                                      .add(Restrictions.ilike("cf",
+		                                                              search,
+		                                                              MatchMode.ANYWHERE))
+		                                      .add(Restrictions.ilike("name",
+		                                                              search,
+		                                                              MatchMode.ANYWHERE))
+		                                      .add(Restrictions.ilike("surname",
+		                                                              search,
+		                                                              MatchMode.ANYWHERE)))
+
+		                     .list();
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public void removeFromCart(int userId,
+	                           int productId)
+	{
+
+		Session session = sessionFactory.getCurrentSession();
+
+		User_t user = (User_t) session.createCriteria(User_t.class)
+		                              .add(Restrictions.eq("id",
+		                                                   userId))
+		                              .uniqueResult();
+
+		List<Product_t> productCartList = user.getProductCartList();
+
+		Product_t product = getProduct(productId);
+
+		Iterator<Product_t> iterator = productCartList.iterator();
+
+		while (iterator.hasNext())
+		{
+			Product_t product_t = iterator.next();
+
+			if (product_t.equals(product))
+				iterator.remove();
+		}
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public void removeFromShopping(int userId,
+	                               int productId)
+	{
+
+		Session session = sessionFactory.getCurrentSession();
+
+		User_t user = (User_t) session.createCriteria(User_t.class)
+		                              .add(Restrictions.eq("id",
+		                                                   userId))
+		                              .uniqueResult();
+
+		Map<Receipt_t, Purchase_t> productPurchaseMap = user.getReceiptPurchaseMap();
+
+		Product_t product = getProduct(productId);
+
+		Iterator<Entry<Receipt_t, Purchase_t>> iteratorReceiptPurchase = productPurchaseMap.entrySet()
+		                                                                                   .iterator();
+
+		while (iteratorReceiptPurchase.hasNext())
+		{
+			Entry<Receipt_t, Purchase_t> receiptPurchaseNext = iteratorReceiptPurchase.next();
+
+			Iterator<Product_t> iteratorProduct = receiptPurchaseNext.getValue()
+			                                                         .getProductList()
+			                                                         .iterator();
+
+			while (iteratorProduct.hasNext())
+			{
+				Product_t otherProduct = iteratorProduct.next();
+
+				if (otherProduct.equals(product))
+				{
+					iteratorProduct.remove();
+				}
+			}
+
+			List<Product_t> prodreceiptPurchaseList2 = receiptPurchaseNext.getValue()
+			                                                              .getProductList();
+
+			System.out.println(prodreceiptPurchaseList2);
+
+		}
+
+	}
+
+}

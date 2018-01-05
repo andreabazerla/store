@@ -1,0 +1,10 @@
+package com.andreabazerla.service;
+
+import com.andreabazerla.model.Factory_t;
+
+public interface FactoryService extends GenericService<Factory_t>
+{
+
+	public Factory_t get(int id);
+
+}

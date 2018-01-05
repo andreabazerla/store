@@ -1,0 +1,11 @@
+package com.andreabazerla.service;
+
+import com.andreabazerla.model.Receipt_t;
+
+public interface ReceiptService extends GenericService<Receipt_t> {
+
+	public void create(Receipt_t receipt);
+
+	public void print(int userId);
+	
+}

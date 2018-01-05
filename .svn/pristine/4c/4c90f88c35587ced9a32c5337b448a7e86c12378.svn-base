@@ -1,0 +1,40 @@
+package com.andreabazerla.dao;
+
+import java.util.List;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import com.andreabazerla.model.Product_t;
+import com.andreabazerla.search.Search;
+
+@Repository
+public class SearchDaoImpl implements SearchDao
+{
+
+	@Autowired
+	private SessionFactory sessionFactory;
+
+	@SuppressWarnings({ "deprecation", "unchecked" })
+	@Override
+	public List<Product_t> checkProductName(Search search)
+	{
+
+		Session session = sessionFactory.getCurrentSession();
+
+		List<Product_t> productList = session.createCriteria(Product_t.class)
+		                                     .add(Restrictions.disjunction()
+		                                                      .add(Restrictions.ilike("name",
+		                                                                              search.getName(),
+		                                                                              MatchMode.ANYWHERE)))
+
+		                                     .list();
+
+		return productList;
+	}
+
+}

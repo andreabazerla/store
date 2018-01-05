@@ -1,0 +1,9 @@
+package com.andreabazerla.service;
+
+import com.andreabazerla.model.Factory;
+
+public interface FactoryService {
+
+	public Factory read(int id);
+
+}

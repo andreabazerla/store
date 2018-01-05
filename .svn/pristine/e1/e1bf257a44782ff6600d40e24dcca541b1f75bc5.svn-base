@@ -1,0 +1,36 @@
+package com.andreabazerla.bean;
+
+import java.io.Serializable;
+
+import com.andreabazerla.util.NullValue;
+
+public class BeanFactory implements Serializable
+{
+	
+	private static final long serialVersionUID = 1L;
+
+	private int id = NullValue.NUMBER;
+	
+	private String name = NullValue.STRING;
+	
+	public int getId()
+	{
+		return id;
+	}
+	
+	public void setId(int id)
+	{
+		this.id = id;
+	}
+	
+	public String getName()
+	{
+		return name;
+	}
+
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+	
+}

@@ -1,0 +1,324 @@
+package com.andreabazerla.model;
+
+import java.io.Serializable;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import com.andreabazerla.util.NullValue;
+
+@Entity
+@Table(name = "users")
+public class User_t implements Serializable
+{
+	
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private int id;
+
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinTable(name = "Cart", joinColumns = @JoinColumn(name = "userId"), inverseJoinColumns = @JoinColumn(name = "productId"))
+	private List<Product_t> productCart = new ArrayList<>();
+	
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinTable(name = "Purchase", joinColumns = @JoinColumn(name = "userId"), inverseJoinColumns = @JoinColumn(name = "productId"))
+	private List<Product_t> productPurchase = new ArrayList<>();
+	
+	@Column
+	private String role = NullValue.STRING;
+
+	@Column
+	private String code = NullValue.STRING;
+
+	@Column
+	private String username = NullValue.STRING;
+
+	@Column
+	private String password = NullValue.STRING;
+
+	@Column
+	private String name = NullValue.STRING;
+
+	@Column
+	private String surname = NullValue.STRING;
+
+	@Column
+	private String email = NullValue.STRING;
+
+	@Column
+	private String birthday = NullValue.STRING;
+
+	@Column
+	private String city = NullValue.STRING;
+
+	@Column
+	private String address = NullValue.STRING;
+
+	@Column
+	private int cap = NullValue.NUMBER;
+
+	@Column
+	private int number = NullValue.NUMBER;
+
+	public User_t()
+	{}
+
+	public User_t(int id,
+	              String role,
+	              String code,
+	              String username,
+	              String password,
+	              String name,
+	              String surname,
+	              String email,
+	              String birthday,
+	              String city,
+	              String address,
+	              int cap,
+	              int number)
+	{
+		this.id = id;
+		this.role = role;
+		this.code = code;
+		this.username = username;
+		this.password = password;
+		this.name = name;
+		this.surname = surname;
+		this.email = email;
+		this.birthday = birthday;
+		this.address = address;
+		this.cap = cap;
+		this.cap = cap;
+	}
+
+	public static User_t make(ResultSet resultSet) throws SQLException
+	{
+
+		int id = Integer.parseInt(resultSet.getString("id"));
+		String role = resultSet.getString("role");
+		String code = resultSet.getString("code");
+		String username = resultSet.getString("username");
+		String password = resultSet.getString("password");
+		String name = resultSet.getString("name");
+		String surname = resultSet.getString("surname");
+		String email = resultSet.getString("email");
+		String birthday = resultSet.getString("birthday");
+		String city = resultSet.getString("city");
+		String address = resultSet.getString("address");
+		int cap = Integer.parseInt(resultSet.getString("cap"));
+		int number = Integer.parseInt(resultSet.getString("number"));
+
+		return new User_t(id,
+		                  role,
+		                  code,
+		                  username,
+		                  password,
+		                  name,
+		                  surname,
+		                  email,
+		                  birthday,
+		                  city,
+		                  address,
+		                  cap,
+		                  number);
+	}
+
+	public int getId()
+	{
+		return id;
+	}
+
+	public void setId(int id)
+	{
+		this.id = id;
+	}
+
+	public List<Product_t> getProductCart()
+	{
+		return productCart;
+	}
+
+	public void setProductCart(List<Product_t> productCart)
+	{
+		this.productCart = productCart;
+	}
+
+	public String getRole()
+	{
+		return role;
+	}
+
+	public void setRole(String role)
+	{
+		this.role = role;
+	}
+
+	public String getCode()
+	{
+		return code;
+	}
+
+	public void setCode(String code)
+	{
+		this.code = code;
+	}
+
+	public String getUsername()
+	{
+		return username;
+	}
+
+	public void setUsername(String username)
+	{
+		this.username = username;
+	}
+
+	public String getPassword()
+	{
+		return password;
+	}
+
+	public void setPassword(String password)
+	{
+		this.password = password;
+	}
+
+	public String getName()
+	{
+		return name;
+	}
+
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+
+	public String getSurname()
+	{
+		return surname;
+	}
+
+	public void setSurname(String surname)
+	{
+		this.surname = surname;
+	}
+
+	public String getEmail()
+	{
+		return email;
+	}
+
+	public void setEmail(String email)
+	{
+		this.email = email;
+	}
+
+	public String getBirthday()
+	{
+		return birthday;
+	}
+
+	public void setBirthday(String birthday)
+	{
+		this.birthday = birthday;
+	}
+
+	public String getCity()
+	{
+		return city;
+	}
+
+	public void setCity(String city)
+	{
+		this.city = city;
+	}
+
+	public String getAddress()
+	{
+		return address;
+	}
+
+	public void setAddress(String address)
+	{
+		this.address = address;
+	}
+
+	public int getCap()
+	{
+		return cap;
+	}
+
+	public void setCap(int cap)
+	{
+		this.cap = cap;
+	}
+
+	public int getNumber()
+	{
+		return number;
+	}
+
+	public void setNumber(int number)
+	{
+		this.number = number;
+	}
+	
+	public List<Product_t> getProductPurchase()
+	{
+		return productPurchase;
+	}
+
+	public void setProductPurchase(List<Product_t> productPurchase)
+	{
+		this.productPurchase = productPurchase;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "User_t [id=" + id
+		       + ", productCart="
+		       + productCart
+		       + ", role="
+		       + role
+		       + ", code="
+		       + code
+		       + ", username="
+		       + username
+		       + ", password="
+		       + password
+		       + ", name="
+		       + name
+		       + ", surname="
+		       + surname
+		       + ", email="
+		       + email
+		       + ", birthday="
+		       + birthday
+		       + ", city="
+		       + city
+		       + ", address="
+		       + address
+		       + ", cap="
+		       + cap
+		       + ", number="
+		       + number
+		       + "]";
+	}
+
+}

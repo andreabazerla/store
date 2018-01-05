@@ -1,0 +1,173 @@
+package com.andreabazerla.dao;
+
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import com.andreabazerla.model.Product_t;
+import com.andreabazerla.model.Purchase_t;
+import com.andreabazerla.model.Receipt_t;
+import com.andreabazerla.model.User_t;
+
+@Repository
+public class ProductDaoImpl implements ProductDao
+{
+
+	@Autowired
+	private SessionFactory sessionFactory;
+
+	public void createProduct(Product_t product)
+	{
+		sessionFactory.getCurrentSession()
+		              .saveOrUpdate(product);
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Product_t> readProducts()
+	{
+
+		List<Product_t> productList = sessionFactory.getCurrentSession()
+		                                            .createQuery("from Product_t")
+		                                            .list();
+
+		return productList;
+	}
+
+	@SuppressWarnings("deprecation")
+	public List<Product_t> searchProduct(String search)
+	{
+		Session currentSession = sessionFactory.getCurrentSession();
+
+		@SuppressWarnings("unchecked")
+		List<Product_t> productList = currentSession.createCriteria(Product_t.class)
+		                                            .add(Restrictions.disjunction()
+		                                                             .add(Restrictions.ilike("cf",
+		                                                                                     search,
+		                                                                                     MatchMode.ANYWHERE))
+		                                                             .add(Restrictions.ilike("name",
+		                                                                                     search,
+		                                                                                     MatchMode.ANYWHERE))
+		                                                             .add(Restrictions.ilike("surname",
+		                                                                                     search,
+		                                                                                     MatchMode.ANYWHERE)))
+
+		                                            .list();
+
+		return productList;
+	}
+
+	public void deleteProduct(int id)
+	{
+		Product_t product = (Product_t) sessionFactory.getCurrentSession()
+		                                              .load(Product_t.class,
+		                                                    id);
+		if (null != product)
+		{
+			this.sessionFactory.getCurrentSession()
+			                   .delete(product);
+		}
+	}
+
+	public Product_t updateProduct(Product_t product)
+	{
+		sessionFactory.getCurrentSession()
+		              .update(product);
+		return product;
+	}
+
+	@SuppressWarnings("deprecation")
+	public Product_t getProduct(int id)
+	{
+
+		Session session = sessionFactory.getCurrentSession();
+
+		Product_t product = (Product_t) session.createCriteria(Product_t.class)
+		                                       .add(Restrictions.eq("id",
+		                                                            id))
+		                                       .uniqueResult();
+
+		return product;
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public void removeFromCart(int userId,
+	                           int productId)
+	{
+
+		Session session = sessionFactory.getCurrentSession();
+
+		User_t user = (User_t) session.createCriteria(User_t.class)
+		                              .add(Restrictions.eq("id",
+		                                                   userId))
+		                              .uniqueResult();
+
+		List<Product_t> productCartList = user.getProductCartList();
+
+		Product_t product = getProduct(productId);
+
+		Iterator<Product_t> iterator = productCartList.iterator();
+
+		while (iterator.hasNext())
+		{
+			Product_t product_t = iterator.next();
+
+			if (product_t.equals(product))
+				iterator.remove();
+		}
+
+		product.setStatus("AVAILABLE");
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public void removeFromShopping(int userId,
+	                               int productId)
+	{
+
+		Session session = sessionFactory.getCurrentSession();
+
+		User_t user = (User_t) session.createCriteria(User_t.class)
+		                              .add(Restrictions.eq("id",
+		                                                   userId))
+		                              .uniqueResult();
+
+		Map<Receipt_t, Purchase_t> productPurchaseMap = user.getReceiptPurchaseMap();
+
+		Product_t product = getProduct(productId);
+
+		Iterator<Entry<Receipt_t, Purchase_t>> iteratorReceiptPurchase = productPurchaseMap.entrySet()
+		                                                                           .iterator();
+
+		while (iteratorReceiptPurchase.hasNext())
+		{
+			Entry<Receipt_t, Purchase_t> receiptPurchaseNext = iteratorReceiptPurchase.next();
+			
+			Iterator<Product_t> iteratorProduct = receiptPurchaseNext.getValue().getProductList().iterator();
+			
+			while (iteratorProduct.hasNext())
+			{
+				Product_t otherProduct = iteratorProduct.next();
+				
+				if (otherProduct.equals(product)) {
+					iteratorProduct.remove();
+				}
+			}
+			
+			List<Product_t> prodreceiptPurchaseList2 = receiptPurchaseNext.getValue().getProductList();
+			
+			System.out.println(prodreceiptPurchaseList2);
+
+		}
+
+	}
+
+}

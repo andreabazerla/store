@@ -1,0 +1,100 @@
+package com.andreabazerla.dao;
+
+import java.util.List;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import com.andreabazerla.model.User;
+
+@Repository
+public class UserDao implements IUserDao
+{
+
+	@Autowired
+	private SessionFactory sessionFactory;
+
+	public void createUser(User user)
+	{
+		sessionFactory.getCurrentSession()
+		              .saveOrUpdate(user);
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<User> readUsers()
+	{
+
+		Session currentSession = sessionFactory.getCurrentSession();
+
+		currentSession.beginTransaction();
+
+		List<User> userList = sessionFactory.getCurrentSession()
+		                                    .createQuery("from User")
+		                                    .list();
+
+		currentSession.getTransaction()
+		              .commit();
+
+		return userList;
+	}
+
+	public User updateUser(User user)
+	{
+		sessionFactory.getCurrentSession()
+		              .update(user);
+		return user;
+	}
+
+	public void deleteUser(int id)
+	{
+		User user = (User) sessionFactory.getCurrentSession()
+		                                 .load(User.class,
+		                                       id);
+		if (null != user)
+		{
+			this.sessionFactory.getCurrentSession()
+			                   .delete(user);
+		}
+	}
+
+	public User loadUser(String pattern)
+	{
+
+		Session currentSession = sessionFactory.getCurrentSession();
+
+		currentSession.beginTransaction();
+
+		User user = (User) currentSession.createCriteria(User.class)
+		                                 .add(Restrictions.eq("username",
+		                                                      pattern))
+		                                 .uniqueResult();
+
+		currentSession.getTransaction()
+		              .commit();
+
+		return user;
+	}
+
+	public User getUser(int id)
+	{
+
+		User user = null;
+
+		Session session = sessionFactory.getCurrentSession();
+
+		session.beginTransaction();
+
+		user = (User) sessionFactory.getCurrentSession()
+		                            .get(User.class,
+		                                 id);
+		
+		session.getTransaction()
+		.commit();
+
+		return user;
+	}
+
+}

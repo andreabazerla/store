@@ -1,0 +1,10 @@
+package com.andreabazerla.dao;
+
+import com.andreabazerla.model.Factory;
+
+public interface FactoryDao
+{
+
+	public Factory readFactory(int id);
+
+}

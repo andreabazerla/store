@@ -1,0 +1,43 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+
+<%@ taglib uri="http://java.sun.com/jstl/core" prefix="c"%>
+
+<div id="product-<c:out value="${beanProduct.id}"></c:out>" class="product" style="max-width: 45%;">
+
+	<input type="hidden" class="id-product"
+		value='<c:out value="${beanProduct.id}"></c:out>'> <img
+		class="product-img" src="http://via.placeholder.com/500x500.png"
+		alt="">
+
+	<h1 class="product-name">
+		<c:out value="${beanProduct.name}"></c:out>
+	</h1>
+
+	<h5 class="product-description">
+		<c:out value="${beanProduct.description}"></c:out>
+	</h5>
+
+	<h2 class="product-price">
+		&dollar;
+		<c:out value="${beanProduct.price}"></c:out>
+	</h2>
+
+	<div class="dropdown product-action">
+		<button class="btn btn-secondary dropdown-toggle" type="button"
+			id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true"
+			aria-expanded="false">Actions</button>
+		<div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+			<a href="Product?id=<c:out value='${beanProduct.id}'></c:out>"
+				class="dropdown-item">View item details</a>
+			<form action="RemoveFromShopping" method="POST"
+				style="display: inline-block">
+				<input type="hidden" name="product-id" id="product-id"
+					value='<c:out value="${beanProduct.id}"></c:out>'>
+				<button type="button" class="dropdown-item button-remove-from-cart">Remove
+					from cart</button>
+			</form>
+		</div>
+	</div>
+
+</div>

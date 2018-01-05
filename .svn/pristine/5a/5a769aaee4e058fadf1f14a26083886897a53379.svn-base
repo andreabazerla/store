@@ -1,0 +1,37 @@
+package com.andreabazerla.facade;
+
+import java.util.List;
+
+import com.andreabazerla.bean.BeanProductPreview;
+import com.andreabazerla.model.Purchase_t;
+import com.andreabazerla.service.FactoryService;
+import com.andreabazerla.service.PersonService;
+import com.andreabazerla.service.ProductService;
+import com.andreabazerla.service.PurchaseService;
+import com.andreabazerla.service.UserService;
+
+public interface WebFacade
+{
+
+	public PersonService getPersonService();
+
+	public ProductService getProductService();
+
+	public FactoryService getFactoryService();
+
+	public UserService getUserService();
+
+	public PurchaseService getPurchaseService();
+
+	public void addToCart(int idUser,
+	                      int idProduct);
+
+	public List<BeanProductPreview> getProductCartList(int idUser);
+
+	public List<BeanProductPreview> getProductShoppingList(int idUser);
+
+	public List<Purchase_t> setPurchase(List<Purchase_t> purchaseList,
+	                                    List<BeanProductPreview> productBeanList,
+	                                    int idUser);
+
+}

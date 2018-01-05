@@ -1,0 +1,12 @@
+package com.andreabazerla.service;
+
+import java.util.List;
+
+import com.andreabazerla.search.Search;
+
+public interface SearchService<T>
+{
+
+	public List<T> search(Search search);
+
+}

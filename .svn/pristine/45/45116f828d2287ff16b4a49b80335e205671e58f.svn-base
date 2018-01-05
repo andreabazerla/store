@@ -1,0 +1,87 @@
+package com.andreabazerla.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.andreabazerla.facade.WebFacade;
+
+public class ParentController
+{
+	
+	@Autowired
+	private WebFacade webFacade;
+	
+	public WebFacade getWebFacade()
+	{
+		return webFacade;
+	}
+	
+//	@Autowired
+//	protected MyTransactionManager txManager;
+	
+//	public interface ITransactionOperations
+//	{
+//		public void doOperations() throws Exception;
+//	}
+//	
+//	protected void doInTransaction(ITransactionOperations operations) throws Exception
+//	{
+//		TransactionStatus txStatus = null;
+//		try
+//		{
+//			txStatus = txManager.beginTransaction();
+//
+//			operations.doOperations();
+//			
+//			txManager.commitTransaction(txStatus);
+//			txStatus = null;
+//		}
+//		catch (Exception e)
+//		{
+//			if (txStatus != null)
+//				txManager.rollbackTransaction(txStatus);
+//		}
+//	}
+
+	/**
+	 * Data string checker Used to store person
+	 * 
+	 * @param cf
+	 * @param name
+	 * @param surname
+	 * @return
+	 */
+	protected boolean checkData(String cf,
+	                            String name,
+	                            String surname)
+	{
+		return (cf != null && !cf.isEmpty()
+		        && cf.trim()
+		             .length() > 0)
+		       && (name != null && !name.isEmpty()
+		           && name.trim()
+		                  .length() > 0)
+		       && (surname != null && !surname.isEmpty()
+		           && surname.trim()
+		                     .length() > 0);
+	}
+
+	/**
+	 * String null checker
+	 * 
+	 * @param string
+	 * @return
+	 */
+	public boolean ifNull(String string)
+	{
+		if (string != null && !string.isEmpty()
+		    && string.trim()
+		             .length() > 0)
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	}
+}

@@ -1,0 +1,47 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+
+<%@ taglib uri="http://java.sun.com/jstl/core" prefix="c"%>
+
+<%-- <c:if test="${product.status == 'AVAILABLE' && product.quantity > 0}"> --%>
+<c:if test="${product.status == 'AVAILABLE'}">
+	<div id="id-card-<c:out value="${product.id}"></c:out>" class="card">
+		<img class="card-img-top img-fluid"
+			src="http://via.placeholder.com/500x350.png" alt="">
+		<div class="card-body">
+			<h4 class="card-title">
+				<c:out value="${product.name}"></c:out>
+			</h4>
+			<p class="card-text">
+				<c:out value="${product.description}"></c:out>
+			</p>
+			<h5 class="card-text">
+				&dollar;
+				<c:out value="${product.price}"></c:out>
+			</h5>
+			<%-- <h6 class="card-text quantity">
+				<c:out value="${product.quantity}"></c:out>
+			</h6> --%>
+
+			<div class="dropdown">
+				<button class="btn btn-secondary dropdown-toggle" type="button"
+					id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true"
+					aria-expanded="false">Actions</button>
+				<div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+					<a href="Product?id=<c:out value='${product.id}'></c:out>"
+						class="dropdown-item">View item details</a>
+					<form action="AddToCart" method="POST">
+						<input type="hidden" name="idProduct" id="idProduct"
+							value='<c:out value="${product.id}"></c:out>'>
+						<button type="button" class="dropdown-item button-add-to-cart">Add
+							to cart</button>
+					</form>
+					<button id="button-reserve-product" type="button" data-toggle="modal"
+						data-target="#modal-reserve-product" class="dropdown-item btn btn-primary">Reserve</button>
+				</div>
+			</div>
+
+
+		</div>
+	</div>
+</c:if>

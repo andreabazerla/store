@@ -1,0 +1,107 @@
+package com.andreabazerla.dao;
+
+import java.util.List;
+
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Property;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import com.andreabazerla.model.Receipt_Purchase_t;
+import com.andreabazerla.model.User_t;
+
+@Repository
+public class UserDaoImpl implements UserDao
+{
+
+	@Autowired
+	private SessionFactory sessionFactory;
+
+	public void createUser(User_t user)
+	{
+		sessionFactory.getCurrentSession()
+		              .saveOrUpdate(user);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<User_t> readUsers()
+	{
+
+		return sessionFactory.getCurrentSession()
+		                     .createQuery("from User_t")
+		                     .list();
+	}
+
+	@Override
+	public User_t getUser(int id)
+	{
+
+		return (User_t) sessionFactory.getCurrentSession()
+		                              .get(User_t.class,
+		                                   id);
+	}
+
+	@Override
+	public User_t updateUser(User_t user)
+	{
+		sessionFactory.getCurrentSession()
+		              .update(user);
+		return user;
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public User_t loadUser(String pattern)
+	{
+
+		Session session = sessionFactory.getCurrentSession();
+
+		return (User_t) session.createCriteria(User_t.class)
+		                       .add(Restrictions.eq("username",
+		                                            pattern))
+		                       .uniqueResult();
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public boolean hasUserPurchase(int idUser)
+	{
+
+		Session session = sessionFactory.getCurrentSession();
+
+		Criteria criteria = session.createCriteria(Receipt_Purchase_t.class)
+		                           .createAlias("purchase",
+		                                        "p")
+		                           .createAlias("p.receipt",
+		                                        "r")
+		                           .setProjection(Property.forName("r.id"))
+		                           .createAlias("user",
+		                                        "u")
+		                           .add(Restrictions.eq("r.flag",
+		                                                1))
+		                           .add(Restrictions.eq("u.id",
+		                                                idUser));
+
+		return criteria.list()
+		               .size() > 0;
+
+	}
+
+	@Override
+	public void deleteUser(int idUser)
+	{
+		User_t user_t = (User_t) sessionFactory.getCurrentSession()
+		                                       .load(User_t.class,
+		                                             idUser);
+		if (null != user_t)
+		{
+			this.sessionFactory.getCurrentSession()
+			                   .delete(user_t);
+		}
+	}
+
+}

@@ -1,0 +1,38 @@
+package com.andreabazerla.dao;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import com.andreabazerla.model.Factory;
+
+@Repository
+public class FactoryDaoImpl implements FactoryDao
+{
+
+	@Autowired
+	private SessionFactory sessionFactory;
+
+	public Factory readFactory(int id)
+	{
+
+		Session session = sessionFactory.getCurrentSession();
+
+		session.beginTransaction();
+
+		Factory factory = (Factory) session.createCriteria(Factory.class)
+		                                   .add(Restrictions.eq("id",
+		                                                        id))
+		                                   .uniqueResult();
+
+		sessionFactory.getCurrentSession()
+		              .getTransaction()
+		              .commit();
+
+		return factory;
+
+	}
+
+}

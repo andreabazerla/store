@@ -1,0 +1,65 @@
+package com.andreabazerla.service;
+
+import java.sql.SQLException;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.andreabazerla.dao.UserDaoImpl;
+import com.andreabazerla.model.User_t;
+
+@Service
+@Transactional
+public class UserServiceImpl implements UserService
+{
+
+	@Autowired
+	private UserDaoImpl userDao;
+
+	@Override
+	public void create(User_t user) throws SQLException
+	{
+		userDao.createUser(user);
+	}
+
+	@Override
+	public List<User_t> read()
+	{
+		return userDao.readUsers();
+	}
+
+	@Override
+	public User_t get(int id)
+	{
+		return userDao.getUser(id);
+	}
+
+	@Override
+	public User_t load(String pattern)
+	{
+		return userDao.loadUser(pattern);
+	}
+
+	@Override
+	public void update(User_t user)
+	{
+		userDao.updateUser(user);
+	}
+
+	@Override
+	public boolean delete(int id)
+	{
+		if (userDao.hasUserPurchase(id))
+		{
+			userDao.deleteUser(id);
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+}

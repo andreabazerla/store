@@ -1,0 +1,67 @@
+package com.andreabazerla.service;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.andreabazerla.dao.ProductDao;
+import com.andreabazerla.model.Product_t;
+
+@Service
+@Transactional
+public class ProductServiceImpl implements ProductService
+{
+
+	@Autowired
+	private ProductDao productDao;
+
+	public void create(Product_t product) throws SQLException
+	{
+		productDao.createProduct(product);
+	}
+
+	public List<Product_t> read()
+	{
+		return productDao.readProducts();
+	}
+
+	public Product_t get(int id)
+	{
+		return productDao.getProduct(id);
+	}
+
+	public ArrayList<Product_t> load(String search)
+	{
+		return (ArrayList<Product_t>) productDao.searchProduct(search);
+	}
+
+	public void delete(int id)
+	{
+		productDao.deleteProduct(id);
+	}
+
+	public void update(Product_t product)
+	{
+		productDao.updateProduct(product);
+	}
+
+	@Override
+	public void sold(int idProduct)
+	{
+		Product_t product = get(idProduct);
+
+		if (product.getQuantity() > 0)
+		{
+			product.setQuantity(product.getQuantity() - 1);
+
+			if (product.getQuantity() == 0)
+				product.setStatus("UNAVAILABLE");
+		}
+
+	}
+
+}

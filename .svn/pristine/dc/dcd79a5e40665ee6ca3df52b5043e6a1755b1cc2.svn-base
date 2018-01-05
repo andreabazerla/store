@@ -1,0 +1,81 @@
+package com.andreabazerla.dao;
+
+import java.util.List;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import com.andreabazerla.model.User_t;
+
+@Repository
+public class UserDaoImpl implements UserDao
+{
+
+	@Autowired
+	private SessionFactory sessionFactory;
+
+	public void createUser(User_t user)
+	{
+		sessionFactory.getCurrentSession()
+		              .saveOrUpdate(user);
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<User_t> readUsers()
+	{
+		List<User_t> userList = sessionFactory.getCurrentSession()
+		                                    .createQuery("from User_t")
+		                                    .list();
+
+		return userList;
+	}
+
+	public User_t updateUser(User_t user)
+	{
+		sessionFactory.getCurrentSession()
+		              .update(user);
+		return user;
+	}
+
+	public void deleteUser(int id)
+	{
+		User_t user = (User_t) sessionFactory.getCurrentSession()
+		                                 .load(User_t.class,
+		                                       id);
+		if (null != user)
+		{
+			this.sessionFactory.getCurrentSession()
+			                   .delete(user);
+		}
+	}
+
+	@SuppressWarnings("deprecation")
+	public User_t loadUser(String pattern)
+	{
+
+		Session session = sessionFactory.getCurrentSession();
+
+		User_t user = (User_t) session.createCriteria(User_t.class)
+		                          .add(Restrictions.eq("username",
+		                                               pattern))
+		                          .uniqueResult();
+
+		return user;
+	}
+
+	public User_t getUser(int id)
+	{
+
+		User_t user = null;
+
+		user = (User_t) sessionFactory.getCurrentSession()
+		                            .get(User_t.class,
+		                                 id);
+
+		return user;
+	}
+
+}

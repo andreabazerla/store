@@ -1,0 +1,62 @@
+package com.andreabazerla.controller;
+
+import java.io.IOException;
+import java.util.List;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.andreabazerla.bean.BeanProductPreview;
+import com.andreabazerla.bean.PageBeanHome;
+import com.andreabazerla.model.Product_t;
+
+@Controller
+public class GenericController extends ParentController
+{
+
+	@RequestMapping(value = "/Home", method = RequestMethod.GET)
+	public ModelAndView home() throws IOException
+	{
+
+		List<Product_t> productList = getWebFacade().getProductService()
+		                                            .read();
+
+		PageBeanHome pageBeanHomeProductList = new PageBeanHome();
+
+		for (Product_t product : productList)
+		{
+			BeanProductPreview beanProductPreview = new BeanProductPreview();
+
+			beanProductPreview.setId(product.getId());
+			beanProductPreview.setName(product.getName());
+			beanProductPreview.setDescription(product.getDescription());
+			beanProductPreview.setPrice(product.getPrice());
+			beanProductPreview.setStatus(product.getStatus());
+//			beanProductPreview.setQuantity(product.getQuantity());
+
+			pageBeanHomeProductList.add(beanProductPreview);
+		}
+
+		return new ModelAndView("home",
+		                        "pageBean",
+		                        pageBeanHomeProductList.getBeanProductPreviewList());
+	}
+
+	@RequestMapping(value = "/404", method = RequestMethod.GET)
+	public ModelAndView errorPage()
+	{
+
+		ModelAndView modelAndView = new ModelAndView("404");
+
+		return modelAndView;
+	}
+
+	@RequestMapping(value = "/401", method = RequestMethod.GET)
+	public String error()
+	{
+		return "401";
+	}
+
+}

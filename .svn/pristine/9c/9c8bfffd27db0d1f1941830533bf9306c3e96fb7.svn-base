@@ -1,0 +1,91 @@
+package com.andreabazerla.dao;
+
+import java.util.List;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.criterion.MatchMode;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import com.andreabazerla.model.Product_t;
+
+@Repository
+public class ProductDaoImpl implements ProductDao
+{
+
+	@Autowired
+	private SessionFactory sessionFactory;
+
+	public void createProduct(Product_t product)
+	{
+		sessionFactory.getCurrentSession()
+		              .saveOrUpdate(product);
+	}
+
+	public List<Product_t> readProducts()
+	{
+
+		List<Product_t> productList = sessionFactory.getCurrentSession()
+		                                            .createQuery("from Product_t")
+		                                            .list();
+
+		return productList;
+	}
+
+	public List<Product_t> searchProduct(String search)
+	{
+		Session currentSession = sessionFactory.getCurrentSession();
+
+		@SuppressWarnings("unchecked")
+		List<Product_t> productList = currentSession.createCriteria(Product_t.class)
+		                                            .add(Restrictions.disjunction()
+		                                                             .add(Restrictions.ilike("cf",
+		                                                                                     search,
+		                                                                                     MatchMode.ANYWHERE))
+		                                                             .add(Restrictions.ilike("name",
+		                                                                                     search,
+		                                                                                     MatchMode.ANYWHERE))
+		                                                             .add(Restrictions.ilike("surname",
+		                                                                                     search,
+		                                                                                     MatchMode.ANYWHERE)))
+
+		                                            .list();
+
+		return productList;
+	}
+
+	public void deleteProduct(int id)
+	{
+		Product_t product = (Product_t) sessionFactory.getCurrentSession()
+		                                              .load(Product_t.class,
+		                                                    id);
+		if (null != product)
+		{
+			this.sessionFactory.getCurrentSession()
+			                   .delete(product);
+		}
+	}
+
+	public Product_t updateProduct(Product_t product)
+	{
+		sessionFactory.getCurrentSession()
+		              .update(product);
+		return product;
+	}
+
+	public Product_t getProduct(int id)
+	{
+
+		Session session = sessionFactory.getCurrentSession();
+
+		Product_t product = (Product_t) session.createCriteria(Product_t.class)
+		                                       .add(Restrictions.eq("id",
+		                                                            id))
+		                                       .uniqueResult();
+
+		return product;
+	}
+
+}

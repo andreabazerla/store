@@ -1,0 +1,37 @@
+package com.andreabazerla.model;
+
+import java.sql.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "Receipt")
+public class Receipt
+{
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private int id;
+
+	@JoinColumn(name = "id")
+	private User user;
+
+	@JoinColumn(name = "id")
+	private Product product;
+
+	@Column
+	private Date date;
+
+	@Column
+	private float amount;
+
+	public Receipt()
+	{}
+
+}

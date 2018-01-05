@@ -1,0 +1,18 @@
+package com.andreabazerla.service;
+
+import com.andreabazerla.bean.PageBeanFactoryProductList;
+import com.andreabazerla.model.Factory_t;
+
+public interface FactoryService {
+	
+	public void create(Factory_t factory_t);
+	
+	public Factory_t read(int id);
+
+	public PageBeanFactoryProductList getProductProduced(int id);
+
+	public Factory_t get(int id);
+
+	public void delete(int id);
+
+}

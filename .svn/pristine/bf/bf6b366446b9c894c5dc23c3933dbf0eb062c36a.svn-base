@@ -1,0 +1,30 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+
+<%@ taglib uri="http://java.sun.com/jstl/core" prefix="c"%>
+
+<div class="card">
+	<img class="card-img-top img-fluid"
+		src="http://via.placeholder.com/500x350.png" alt="">
+	<div class="card-body">
+		<h4 class="card-title">
+			<c:out value="${param.product.name}"></c:out>
+		</h4>
+		<p class="card-text">
+			<c:out value="${product.description}"></c:out>
+		</p>
+		<h5 class="card-text">
+			&euro;
+			<c:out value="${product.price}"></c:out>
+		</h5>
+		<a href="Product?id=<c:out value='${product.id}'></c:out>"
+			class="btn btn-secondary">View item details</a>
+		<form action="AddToCart" method="POST" style="display: inline-block">
+			<input type="hidden" name="idProduct" id="idProduct"
+				value='<c:out value="${product.id}"></c:out>'>
+			<button type="button" class="btn btn-primary add-to-cart">Add
+				to cart</button>
+		</form>
+	</div>
+
+</div>

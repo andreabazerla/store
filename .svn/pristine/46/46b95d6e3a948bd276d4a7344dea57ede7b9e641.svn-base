@@ -1,0 +1,27 @@
+package com.andreabazerla.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.andreabazerla.dao.SearchDao;
+import com.andreabazerla.model.Product_t;
+import com.andreabazerla.search.Search;
+
+@Service
+@Transactional
+public class SearchServiceImpl implements SearchService<Product_t>
+{
+
+	@Autowired
+	private SearchDao searchDao;
+	
+	@Override
+	public List<Product_t> search(Search search)
+	{
+		return searchDao.checkProductName(search);
+	}
+
+}

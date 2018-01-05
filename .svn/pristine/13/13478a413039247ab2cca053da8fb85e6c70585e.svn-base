@@ -1,0 +1,10 @@
+package com.andreabazerla.service;
+
+import com.andreabazerla.model.User;
+
+public interface IUserService extends GenericService<User> {
+
+	public User get(int id);	
+	public User load(String pattern);
+	
+}

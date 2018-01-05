@@ -1,0 +1,30 @@
+package com.andreabazerla.facade;
+
+import java.util.List;
+
+import com.andreabazerla.bean.BeanProduct;
+import com.andreabazerla.model.User_t;
+import com.andreabazerla.service.FactoryService;
+import com.andreabazerla.service.PersonService;
+import com.andreabazerla.service.ProductService;
+import com.andreabazerla.service.UserService;
+
+public interface WebFacade
+{
+
+	public PersonService getPersonService();
+
+	public ProductService getProductService();
+
+	public FactoryService getFactoryService();
+
+	public UserService getUserService();
+
+	User_t addToCart(int idUser,
+	                 int idProduct);
+
+	public List<BeanProduct> getProductList(int idUser);
+	
+	public User_t getProductCart(int idUser);
+
+}

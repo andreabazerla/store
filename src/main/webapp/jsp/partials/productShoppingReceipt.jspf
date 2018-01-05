@@ -1,0 +1,19 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+
+<%@ taglib uri="http://java.sun.com/jstl/core" prefix="c"%>
+
+<div id="id-card-<c:out value="${product.id}"></c:out>" class="card" style="opacity: 0.50">
+	<img class="card-img-top img-fluid"
+		src="http://via.placeholder.com/500x350.png" alt="">
+	<div class="card-body">
+		<h4 class="card-title">
+			<c:out value="${product.name}"></c:out>
+		</h4>
+		<p class="card-text">
+			<c:out value="${product.description}"></c:out>
+		</p>
+	</div>
+	<input type="hidden" name="receipt-id" class="receipt-id"
+		value='<c:out value="${product.beanReceipt.id}"></c:out>' />
+</div>

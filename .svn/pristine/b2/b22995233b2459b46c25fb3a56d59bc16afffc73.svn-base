@@ -1,0 +1,50 @@
+package com.andreabazerla.facade;
+
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import com.andreabazerla.bean.BeanProductPreview;
+import com.andreabazerla.bean.BeanPurchase;
+import com.andreabazerla.bean.BeanReceipt;
+import com.andreabazerla.bean.PageBeanProductDetails;
+import com.andreabazerla.bean.PageBeanShopping;
+import com.andreabazerla.service.FactoryService;
+import com.andreabazerla.service.ProductService;
+import com.andreabazerla.service.PurchaseService;
+import com.andreabazerla.service.ReceiptService;
+import com.andreabazerla.service.UserService;
+
+public interface WebFacade
+{
+
+	public ProductService getProductService();
+
+	public FactoryService getFactoryService();
+
+	public UserService getUserService();
+
+	public PurchaseService getPurchaseService();
+
+	public ReceiptService getReceiptService();
+
+	public void addToCart(int idUser,
+	                      int idProduct);
+
+	public List<BeanProductPreview> getBeanProductPreviewFromCartList(int idUser);
+
+	public Map<BeanReceipt, BeanPurchase> getBeanReceiptPurchaseMap(int idUser);
+
+	public PageBeanShopping setPageBeanShopping(List<BeanProductPreview> productBeanList,
+	                                    int idUser, PageBeanShopping pageBeanShopping);
+
+	public void createNewProduct(int idUser,
+	                             HttpServletRequest request)
+	        throws SQLException;
+
+	PageBeanProductDetails getProductBean(int productId,
+	                                      PageBeanProductDetails beanProductDetails);
+
+}

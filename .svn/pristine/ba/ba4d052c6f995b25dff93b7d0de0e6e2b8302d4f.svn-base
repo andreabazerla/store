@@ -1,0 +1,13 @@
+package com.andreabazerla.dao;
+
+import java.util.List;
+
+import com.andreabazerla.model.Product_t;
+import com.andreabazerla.search.Search;
+
+public interface SearchDao
+{
+	
+	public List<Product_t> checkProductName(Search search);
+
+}

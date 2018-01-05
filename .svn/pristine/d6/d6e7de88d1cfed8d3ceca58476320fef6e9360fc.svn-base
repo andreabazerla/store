@@ -1,0 +1,10 @@
+package com.andreabazerla.dao;
+
+import com.andreabazerla.model.Receipt_t;
+
+public interface ReceiptDao extends GenericDao<Receipt_t>
+{
+
+	public void deleteReceipt(int id);
+
+}

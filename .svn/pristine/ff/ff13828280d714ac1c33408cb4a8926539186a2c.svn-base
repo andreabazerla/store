@@ -1,0 +1,24 @@
+package com.andreabazerla.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
+
+@Controller
+public class ErrorController extends ParentController
+{
+
+	@RequestMapping(value = "/404", method = RequestMethod.GET)
+	public ModelAndView errorPage()
+	{
+		return new ModelAndView("404");
+	}
+
+	@RequestMapping(value = "/401", method = RequestMethod.GET)
+	public ModelAndView error()
+	{
+		return new ModelAndView("401");
+	}
+
+}

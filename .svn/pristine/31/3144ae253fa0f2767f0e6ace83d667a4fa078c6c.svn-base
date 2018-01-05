@@ -1,0 +1,41 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+
+<%@ taglib uri="http://java.sun.com/jstl/core" prefix="c"%>
+
+<div id="id-card-<c:out value="${product.id}"></c:out>" class="card">
+	<img class="card-img-top img-fluid"
+		src="http://via.placeholder.com/500x350.png" alt="">
+	<div class="card-body">
+		<h4 class="card-title">
+			<c:out value="${product.name}"></c:out>
+		</h4>
+		<p class="card-text">
+			<c:out value="${product.description}"></c:out>
+		</p>
+		<h5 class="card-text">
+			&dollar;
+			<c:out value="${product.price}"></c:out>
+		</h5>
+		<div class="dropdown">
+			<button class="btn btn-secondary dropdown-toggle" type="button"
+				id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true"
+				aria-expanded="false">Actions</button>
+			<div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+				<a href="Product?id=<c:out value='${product.id}'></c:out>"
+					class="dropdown-item">View item details</a>
+				<form action="RemoveFromShopping" method="POST"
+					style="display: inline-block">
+					<input type="hidden" name="product-id" id="product-id"
+						value='<c:out value="${product.id}"></c:out>'>
+					<button type="button"
+						class="dropdown-item button-remove-from-cart">Remove
+						from cart</button>
+				</form>
+			</div>
+		</div>
+		<%-- <h6 class="card-text quantity">
+			<c:out value="${product.quantity}"></c:out>
+		</h6> --%>
+	</div>
+</div>

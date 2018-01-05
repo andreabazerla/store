@@ -1,0 +1,60 @@
+package com.andreabazerla.facade;
+
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import com.andreabazerla.bean.BeanProduct;
+import com.andreabazerla.bean.BeanPurchase;
+import com.andreabazerla.bean.BeanReceipt;
+import com.andreabazerla.bean.BeanSearch;
+import com.andreabazerla.bean.PageBeanFactory;
+import com.andreabazerla.bean.PageBeanHome;
+import com.andreabazerla.bean.PageBeanProductDetails;
+import com.andreabazerla.bean.PageBeanShopping;
+import com.andreabazerla.service.FactoryService;
+import com.andreabazerla.service.ProductService;
+import com.andreabazerla.service.PurchaseService;
+import com.andreabazerla.service.ReceiptService;
+import com.andreabazerla.service.UserService;
+
+public interface WebFacade
+{
+
+	public ProductService getProductService();
+
+	public FactoryService getFactoryService();
+
+	public UserService getUserService();
+
+	public PurchaseService getPurchaseService();
+
+	public ReceiptService getReceiptService();
+
+	public void addToCart(int idUser,
+	                      int idProduct);
+
+	public List<BeanProduct> getBeanProductListFromCart(int idUser);
+
+	public Map<BeanReceipt, BeanPurchase> getBeanReceiptPurchaseMap(int idUser);
+
+	public PageBeanShopping setPageBeanShopping(List<BeanProduct> productBeanList,
+	                                    int idUser, PageBeanShopping pageBeanShopping) throws SQLException;
+
+	public void createNewProduct(int idUser,
+	                             HttpServletRequest request)
+	        throws SQLException;
+
+	public PageBeanProductDetails getProductBean(int productId,
+	                                      PageBeanProductDetails beanProductDetails);
+
+	public void deletePurchase(int idUser,
+	                               int idReceipt);
+
+	public PageBeanFactory getPageBeanFactory(int id);
+
+	public PageBeanHome getPageBeanHome(BeanSearch beanSearch);
+
+}

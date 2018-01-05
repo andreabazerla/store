@@ -1,0 +1,21 @@
+package com.andreabazerla.dao;
+
+import java.util.List;
+
+import com.andreabazerla.bean.BeanFactory;
+import com.andreabazerla.model.Factory_t;
+
+public interface FactoryDao
+{
+
+	public void createFactory(Factory_t factory_t);
+	
+	public Factory_t readFactory(int id);
+
+	public Factory_t getFactory(int id);
+
+	public boolean deleteFactory(int id);
+
+	public List<BeanFactory> getAllFactory();
+
+}

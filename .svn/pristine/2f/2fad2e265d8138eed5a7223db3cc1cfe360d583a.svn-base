@@ -1,0 +1,20 @@
+package com.andreabazerla.dao;
+
+import java.util.List;
+
+import com.andreabazerla.model.Person_t;
+
+public interface PersonDao extends GenericDao<Person_t> {
+	
+	public void createPerson(Person_t Person);
+
+	public List<Person_t> readPersons();
+
+	public Person_t updatePerson(Person_t Person);
+
+	public void deletePerson(int id);
+
+	public Person_t loadPerson(String pattern);
+	public List<Person_t> searchPerson(String pattern);
+	
+}

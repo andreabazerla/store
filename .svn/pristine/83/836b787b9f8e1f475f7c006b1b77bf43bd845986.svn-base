@@ -1,0 +1,167 @@
+package com.andreabazerla.controller;
+
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.andreabazerla.model.Product_t;
+
+@Controller
+public class ProductController extends ParentController
+{
+
+	@RequestMapping(value = "/Product", method = RequestMethod.GET)
+	public ModelAndView viewProduct(HttpServletRequest request,
+	                         HttpServletResponse response)
+	        throws SQLException, IOException
+	{
+		
+		ModelAndView modelAndView = new ModelAndView("product");
+		int productId = Integer.parseInt((String) request.getParameter("id")); 
+		Product_t product = getWebFacade().getProductService().get(productId);
+		modelAndView.addObject("product", product);
+		return modelAndView;
+		
+	}
+
+	//	@RequestMapping(value = "/StoreProduct", method = RequestMethod.POST)
+	//	public void storeProduct(HttpServletRequest request,
+	//	                         HttpServletResponse response)
+	//	        throws SQLException, IOException
+	//	{
+	//
+	//		PrintWriter printWriter = response.getWriter();
+	//
+	//		String idString = request.getParameter("id");
+	//		int id = 0;
+	//		if (idString != null)
+	//		{
+	//			id = Integer.parseInt(idString);
+	//		}
+	//
+	//		String cf = request.getParameter("cf");
+	//		String name = request.getParameter("name");
+	//		String surname = request.getParameter("surname");
+	//
+	//		Product tempProduct = null;
+	//		Product product = null;
+	//		String feedback = null;
+	//
+	//		if (checkData(cf,
+	//		              name,
+	//		              surname))
+	//		{
+	//
+	//			if (id == 0)
+	//			{
+	//
+	//				tempProduct = productService.get(cf);
+	//
+	//				if (tempProduct == null)
+	//				{
+	//					product = new Product(id,
+	//					                      status,
+	//					                      price,
+	//					                      type,
+	//					                      console,
+	//					                      date,
+	//					                      gadge,
+	//					                      model,
+	//					                      producer,
+	//					                      build,
+	//					                      genre);
+	//					
+	//					productService.create(product);
+	//					feedback = "{ \"type\": \"0\", \"header\": \"Success! \", \"message\": \"Ok, user created\" }";
+	//
+	//				}
+	//				else
+	//				{
+	//					feedback = "{ \"type\": \"1\", \"header\": \"Error! \", \"message\": \"User already exist\" }";
+	//				}
+	//
+	//			}
+	//			else
+	//			{
+	//
+	//				product = new Product(id,
+	//				                      status,
+	//				                      price,
+	//				                      type,
+	//				                      console,
+	//				                      date,
+	//				                      gadge,
+	//				                      model,
+	//				                      producer,
+	//				                      build,
+	//				                      genre);
+	//				
+	//				productService.update(product);
+	//				feedback = "{ \"type\": \"0\", \"header\": \"Success! \", \"message\": \"Ok, user updated\" }";
+	//
+	//			}
+	//
+	//		}
+	//		else
+	//		{
+	//			feedback = "{ \"type\": \"1\", \"header\": \"Error! \", \"message\": \"Empty fields\" }";
+	//		}
+	//
+	//		response.setContentType("application/json;charset=utf-8");
+	//		printWriter.print(feedback);
+	//		printWriter.flush();
+	//		printWriter.close();
+	//	}
+
+	/**
+	 * Delete a Product
+	 * 
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value = "/DeleteProduct", method = RequestMethod.POST)
+	public ModelAndView deleteProduct(HttpServletRequest request)
+	{
+		int productId = Integer.parseInt(request.getParameter("id"));
+		getWebFacade().getProductService().delete(productId);
+		return new ModelAndView("redirect:/");
+	}
+
+	/**
+	 * Search a Product
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/SearchProduct", method = RequestMethod.POST)
+	public ModelAndView searchProduct(HttpServletRequest request)
+	{
+
+		String search = "";
+
+		ArrayList<Product_t> productList = new ArrayList<Product_t>();
+
+		search = request.getParameter("search");
+		request.setAttribute("search",
+		                     search);
+
+		productList = (ArrayList<Product_t>) getWebFacade().getProductService().load(search);
+
+		request.setAttribute("people",
+		                     productList);
+
+		ModelAndView modelAndView = new ModelAndView("productList");
+		modelAndView.addObject("people",
+		                       productList);
+
+		return modelAndView;
+	}
+
+}

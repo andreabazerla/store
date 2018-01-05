@@ -1,0 +1,274 @@
+package com.andreabazerla.model;
+
+import java.io.Serializable;
+import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+import com.andreabazerla.util.NullValue;
+
+@Entity
+@Table(name = "Product")
+public class Product_t implements Serializable
+{
+
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+
+	@Column
+	private String name = NullValue.STRING;
+
+	@Column
+	private String description = NullValue.STRING;
+
+	@Column
+	private String status = NullValue.STRING;
+	
+	@Column
+	private int quantity = NullValue.NUMBER;
+
+	@Column
+	private float price = NullValue.NUMBER;
+
+	@Column
+	private String type = NullValue.STRING;
+
+	@Column
+	private String console = NullValue.STRING;
+
+	@Column
+	private Date date = NullValue.DATE;
+
+	@Column
+	private char gadge = NullValue.CHAR;
+
+	@Column
+	private int model = NullValue.NUMBER;
+
+	@OneToOne
+	@JoinColumn(name = "id")
+	private Factory_t factory = NullValue.FACTORY;
+
+	@Column
+	private int build = NullValue.NUMBER;
+
+	@Column
+	private String genre = NullValue.STRING;
+
+	public Product_t()
+	{}
+
+	public Product_t(String name,
+	                 String description,
+	                 String status,
+	                 int quantity,
+	                 float price,
+	                 String type,
+	                 String console,
+	                 Date date,
+	                 char gadge,
+	                 int model,
+	                 Factory_t factory,
+	                 int build,
+	                 String genre)
+	{
+		super();
+		this.name = name;
+		this.description = description;
+		this.status = status;
+		this.quantity = quantity;
+		this.price = price;
+		this.type = type;
+		this.console = console;
+		this.date = date;
+		this.gadge = gadge;
+		this.model = model;
+		this.factory = factory;
+		this.build = build;
+		this.genre = genre;
+	}
+
+	public int getId()
+	{
+		return id;
+	}
+
+	public void setId(int id)
+	{
+		this.id = id;
+	}
+
+	public String getName()
+	{
+		return name;
+	}
+
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+
+	public String getDescription()
+	{
+		return description;
+	}
+
+	public void setDescription(String description)
+	{
+		this.description = description;
+	}
+
+	public String getStatus()
+	{
+		return status;
+	}
+
+	public void setStatus(String status)
+	{
+		this.status = status;
+	}
+
+	public int getQuantity()
+	{
+		return quantity;
+	}
+
+	public void setQuantity(int quantity)
+	{
+		this.quantity = quantity;
+	}
+
+	public float getPrice()
+	{
+		return price;
+	}
+
+	public void setPrice(float price)
+	{
+		this.price = price;
+	}
+
+	public String getType()
+	{
+		return type;
+	}
+
+	public void setType(String type)
+	{
+		this.type = type;
+	}
+
+	public String getConsole()
+	{
+		return console;
+	}
+
+	public void setConsole(String console)
+	{
+		this.console = console;
+	}
+
+	public Date getDate()
+	{
+		return date;
+	}
+
+	public void setDate(Date date)
+	{
+		this.date = date;
+	}
+
+	public char getGadge()
+	{
+		return gadge;
+	}
+
+	public void setGadge(char gadge)
+	{
+		this.gadge = gadge;
+	}
+
+	public int getModel()
+	{
+		return model;
+	}
+
+	public void setModel(int model)
+	{
+		this.model = model;
+	}
+
+	public Factory_t getFactory()
+	{
+		return factory;
+	}
+
+	public void setFactory(Factory_t factory)
+	{
+		this.factory = factory;
+	}
+
+	public int getBuild()
+	{
+		return build;
+	}
+
+	public void setBuild(int build)
+	{
+		this.build = build;
+	}
+
+	public String getGenre()
+	{
+		return genre;
+	}
+
+	public void setGenre(String genre)
+	{
+		this.genre = genre;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "Product_t [id=" + id
+		       + ", name="
+		       + name
+		       + ", description="
+		       + description
+		       + ", status="
+		       + status
+		       + ", quantity="
+		       + quantity
+		       + ", price="
+		       + price
+		       + ", type="
+		       + type
+		       + ", console="
+		       + console
+		       + ", date="
+		       + date
+		       + ", gadge="
+		       + gadge
+		       + ", model="
+		       + model
+		       + ", factory="
+		       + factory
+		       + ", build="
+		       + build
+		       + ", genre="
+		       + genre
+		       + "]";
+	}
+	
+}

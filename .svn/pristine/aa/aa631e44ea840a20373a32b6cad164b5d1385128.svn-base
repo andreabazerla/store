@@ -1,0 +1,22 @@
+
+package com.andreabazerla.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.andreabazerla.dao.FactoryDao;
+import com.andreabazerla.model.Factory;
+
+@Service
+@Transactional
+public class FactoryServiceImpl implements FactoryService {
+
+	@Autowired
+	private FactoryDao factoryDao;
+
+	public Factory read(int id) {
+		return factoryDao.readFactory(id);
+	}
+
+}

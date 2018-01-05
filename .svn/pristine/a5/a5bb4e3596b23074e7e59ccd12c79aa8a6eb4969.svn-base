@@ -1,0 +1,44 @@
+package com.andreabazerla.service;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.andreabazerla.dao.PersonDaoImpl;
+import com.andreabazerla.model.Person_t;
+
+@Service
+@Transactional
+public class PersonServiceImpl implements PersonService {
+
+	@Autowired
+	private PersonDaoImpl personDao;
+	
+	public void create(Person_t person) throws SQLException {
+		personDao.createPerson(person);
+	}
+
+	public List<Person_t> read() {
+		return personDao.readPersons();
+	}
+	
+	public Person_t get(String cf) {
+		return personDao.loadPerson(cf);
+	}
+	
+	public ArrayList<Person_t> load(String search) {
+		return (ArrayList<Person_t>) personDao.searchPerson(search);
+	}
+	
+	public void delete(int id) {
+		personDao.deletePerson(id);
+	}
+
+	public void update(Person_t person) {
+		personDao.updatePerson(person);
+	}
+}

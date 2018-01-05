@@ -1,0 +1,86 @@
+package com.andreabazerla.model;
+
+import java.io.Serializable;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Cascade;
+
+import com.andreabazerla.util.NullValue;
+
+@Entity
+@Table(name = "Purchase")
+public class Purchase_t implements Serializable
+{
+
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "userId")
+	private User_t user = (User_t) NullValue.OBJECT;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "productId")
+	private Product_t product = (Product_t) NullValue.OBJECT;
+
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@Cascade(org.hibernate.annotations.CascadeType.ALL)
+	@JoinColumn(name = "receiptId")
+	private Receipt_t receipt = (Receipt_t) NullValue.OBJECT;
+
+	public Purchase_t()
+	{}
+
+	public int getId()
+	{
+		return id;
+	}
+
+	public void setId(int id)
+	{
+		this.id = id;
+	}
+
+	public User_t getUser()
+	{
+		return user;
+	}
+
+	public void setUser(User_t user)
+	{
+		this.user = user;
+	}
+
+	public Product_t getProduct()
+	{
+		return product;
+	}
+
+	public void setProduct(Product_t product)
+	{
+		this.product = product;
+	}
+
+	public Receipt_t getReceipt()
+	{
+		return receipt;
+	}
+
+	public void setReceipt(Receipt_t receipt)
+	{
+		this.receipt = receipt;
+	}
+
+}

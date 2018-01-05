@@ -1,0 +1,128 @@
+package com.andreabazerla.bean;
+
+import com.andreabazerla.util.NullValue;
+
+public class BeanProductPreview
+{
+
+	private int id = NullValue.NUMBER;
+
+	private String name = NullValue.STRING;
+
+	private String description = NullValue.STRING;
+
+	private float price = NullValue.NUMBER;
+
+	private String status = NullValue.STRING;
+
+	private BeanReceipt beanReceipt = (BeanReceipt) NullValue.OBJECT;
+
+	private int receiptId = NullValue.NUMBER;
+
+	//	private int quantity = NullValue.NUMBER;
+
+	public int getId()
+	{
+		return id;
+	}
+
+	public void setId(int id)
+	{
+		this.id = id;
+	}
+
+	public String getName()
+	{
+		return name;
+	}
+
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+
+	public String getDescription()
+	{
+		return description;
+	}
+
+	public void setDescription(String description)
+	{
+		this.description = description;
+	}
+
+	public float getPrice()
+	{
+		return price;
+	}
+
+	public void setPrice(float price)
+	{
+		this.price = price;
+	}
+
+	public String getStatus()
+	{
+		return status;
+	}
+
+	public void setStatus(String status)
+	{
+		this.status = status;
+	}
+
+	//	public int getQuantity()
+	//	{
+	//		return quantity;
+	//	}
+	//
+	//	public void setQuantity(int quantity)
+	//	{
+	//		this.quantity = quantity;
+	//	}
+
+	public BeanReceipt getBeanReceipt()
+	{
+		return beanReceipt;
+	}
+
+	public void setBeanReceipt(BeanReceipt beanReceipt)
+	{
+		this.beanReceipt = beanReceipt;
+	}
+
+	public int getReceiptId()
+	{
+		return receiptId;
+	}
+
+	public void setReceiptId(int receiptId)
+	{
+		this.receiptId = receiptId;
+	}
+
+	@Override
+	public int hashCode()
+	{
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + id;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		BeanProductPreview other = (BeanProductPreview) obj;
+		if (id != other.id)
+			return false;
+		return true;
+	}
+
+}

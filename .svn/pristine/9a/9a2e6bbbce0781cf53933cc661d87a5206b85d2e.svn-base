@@ -1,0 +1,52 @@
+package com.andreabazerla.controller;
+
+import java.io.IOException;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.andreabazerla.bean.PageBeanHome;
+import com.andreabazerla.model.Factory_t;
+import com.andreabazerla.search.Search;
+
+@Controller
+public class GenericController extends ParentController
+{
+
+	@RequestMapping(value = "/Home", method = RequestMethod.GET)
+	public ModelAndView home(HttpServletRequest request) throws IOException
+	{
+
+		String name = request.getParameter("name");
+		String description = request.getParameter("description");
+		Factory_t factory_t = new Factory_t(request.getParameter("factory"));
+		
+		int min = 0;
+		String minString = request.getParameter("min");
+		if(minString != null && !minString.isEmpty())
+			min = Integer.parseInt(minString);
+		
+		int max = 0;
+		String maxString = request.getParameter("max");
+		if(maxString != null && !maxString.isEmpty())
+			max = Integer.parseInt(maxString);
+			
+		Search search = new Search();
+		search.setName(name);
+		search.setDescription(description);
+		search.setFactory_t(factory_t);
+		search.setMin(min);
+		search.setMax(max);
+
+		PageBeanHome pageBeanHome = getWebFacade().getPageBeanHome(search);
+		
+		return new ModelAndView("home",
+		                        "pageBean",
+		                        pageBeanHome);
+	}
+
+}

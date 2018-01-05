@@ -1,0 +1,51 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+
+<%@ taglib uri="http://java.sun.com/jstl/core" prefix="c"%>
+
+<div id="product-<c:out value="${beanProduct.id}"></c:out>"
+	class="product" style="width: 29%">
+
+	<input type="hidden" class="id-product"
+		value='<c:out value="${beanProduct.id}"></c:out>'> <img
+		class="product-img" src="http://via.placeholder.com/500x500.png"
+		alt="">
+
+	<h1 class="product-name">
+		<c:out value="${beanProduct.name}"></c:out>
+	</h1>
+
+	<h5 class="product-description">
+		<c:out value="${beanProduct.description}"></c:out>
+	</h5>
+
+	<h2 class="product-price">
+		&dollar;
+		<c:out value="${beanProduct.price}"></c:out>
+	</h2>
+
+	<div class="dropdown product-action">
+		<button class="btn btn-secondary dropdown-toggle" type="button"
+			id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true"
+			aria-expanded="false">Actions</button>
+		<div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+			<a href="Product?id=<c:out value='${beanProduct.id}'></c:out>"
+				class="dropdown-item">View item details</a>
+			<c:if test="${currentUser.role == 'ADMIN'}">
+				<form action="EditAdmin" method="POST">
+					<button type="submit" class="dropdown-item">Edit product</button>
+					<input type="hidden" name="action" value="EDIT_ADMIN">
+				</form>
+				<button type="button" class="dropdown-item button-delete-product">Delete
+					product</button>
+			</c:if>
+			<form action="AddToCart" method="POST">
+				<input type="hidden" name="idProduct" id="idProduct"
+					value='<c:out value="${beanProduct.id}"></c:out>'>
+				<button type="button" class="dropdown-item button-add-to-cart">Add
+					to cart</button>
+			</form>
+		</div>
+	</div>
+
+</div>

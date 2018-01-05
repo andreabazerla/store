@@ -1,0 +1,73 @@
+
+package com.andreabazerla.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.andreabazerla.bean.BeanProductPreview;
+import com.andreabazerla.bean.PageBeanFactoryProductList;
+import com.andreabazerla.dao.FactoryDao;
+import com.andreabazerla.model.Factory_t;
+import com.andreabazerla.model.Product_t;
+
+@Service
+@Transactional
+public class FactoryServiceImpl implements FactoryService
+{
+
+	@Autowired
+	private FactoryDao factoryDao;
+
+	@Override
+	public Factory_t read(int id)
+	{
+		return factoryDao.readFactory(id);
+	}
+
+	@Override
+	public Factory_t get(int id)
+	{
+		return factoryDao.getFactory(id);
+	}
+
+	@Override
+	public void delete(int id)
+	{
+		factoryDao.deleteFactory(id);
+	}
+
+	@Override
+	public PageBeanFactoryProductList getProductProduced(int id)
+	{
+		Factory_t factory = (Factory_t) this.get(id);
+
+		PageBeanFactoryProductList pageBeanFactoryProductList = new PageBeanFactoryProductList();
+
+		pageBeanFactoryProductList.setName(factory.getName());
+
+		for (Product_t product : factory.getProductList())
+		{
+			BeanProductPreview beanProduct = new BeanProductPreview();
+
+			beanProduct.setId(product.getId());
+			beanProduct.setName(product.getName());
+			beanProduct.setDescription(product.getDescription());
+			beanProduct.setPrice(product.getPrice());
+			beanProduct.setStatus(product.getStatus());
+			//			beanProduct.setQuantity(product.getQuantity());
+
+			pageBeanFactoryProductList.add(beanProduct);
+		}
+
+		return pageBeanFactoryProductList;
+	}
+
+	@Override
+	public void create(Factory_t factory_t)
+	{
+		factoryDao.createFactory(factory_t);
+		
+	}
+
+}

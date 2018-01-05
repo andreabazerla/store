@@ -1,0 +1,69 @@
+package com.andreabazerla.search;
+
+import com.andreabazerla.model.Factory_t;
+import com.andreabazerla.util.NullValue;
+
+public class Search
+{
+
+	private String name = NullValue.STRING;
+	
+	private String description = NullValue.STRING;
+	
+	private Factory_t factory_t = (Factory_t) NullValue.OBJECT;
+	
+	private int min = NullValue.NUMBER;
+
+	private int max = NullValue.NUMBER;
+
+	public String getName()
+	{
+		return name;
+	}
+
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+
+	public String getDescription()
+	{
+		return description;
+	}
+
+	public void setDescription(String description)
+	{
+		this.description = description;
+	}
+
+	public Factory_t getFactory_t()
+	{
+		return factory_t;
+	}
+
+	public void setFactory_t(Factory_t factory_t)
+	{
+		this.factory_t = factory_t;
+	}
+
+	public int getMin()
+	{
+		return min;
+	}
+
+	public void setMin(int min)
+	{
+		this.min = min;
+	}
+
+	public int getMax()
+	{
+		return max;
+	}
+
+	public void setMax(int max)
+	{
+		this.max = max;
+	}
+	
+}

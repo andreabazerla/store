@@ -1,0 +1,26 @@
+$(document).ready(function() {
+	$('.button-add-to-cart').click(function() {
+
+		var formData = {
+			idProduct : $(this).parent().children(":first-child").val(),
+		};
+
+		$.ajax({
+			type : 'POST',
+			url : 'AddToCart',
+			data : formData,
+			conteType : 'application/json',
+			dataType : 'json',
+			success : function(data) {
+				/* if (data.quantity < 1) { */
+				$('#id-card-' + data.idCard).closest('.card').hide();
+				/* } else { */
+				/*
+				 * $('#id-card-' + data.idCard + ' > .card-body >
+				 * .quantity').text(data.quantity);
+				 */
+				/* } */
+			},
+		});
+	});
+});
